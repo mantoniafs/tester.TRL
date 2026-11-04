@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Calculadora TRL – inovaHC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── inovaHC brand tokens ─────────────────────────────────────────────── */
+:root {
+  --ihc-green:      #41CC96;
+  --ihc-teal:       #047474;
+  --ihc-teal-dark:  #035555;
+  --ihc-purple:     #604B8C;
+  --ihc-purple-lt:  #CCBCF1;
+  --ihc-blue:       #23549A;
+  --ihc-blue-lt:    #D3E2EB;
+  --ihc-green-lt:   #83EEA7;
+  --ihc-green-pale: #BEEFD9;
+  --ihc-coral:      #F38B75;
+  --ihc-red:        #F64943;
+  --bg:             #F4FAF7;
+  --surface:        #FFFFFF;
+  --border:         #D8EFE6;
+  --text:           #0D2B2B;
+  --text-mid:       #3A5C5C;
+  --text-soft:      #7A9C9C;
+  --radius-card:    14px;
+  --shadow:         0 2px 12px rgba(4,116,116,0.08);
+}
+
+/* ── Reset ───────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Mulish', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────── */
+.header {
+  background: var(--ihc-teal);
+  color: white;
+  padding: 2.5rem 2rem 2.2rem;
+  position: relative;
+  overflow: hidden;
+}
+/* decorative rings — inovaHC grafismo style */
+.header-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 28px solid rgba(65,204,150,0.18);
+  pointer-events: none;
+}
+.header-ring-1 { width: 260px; height: 260px; top: -80px; right: -60px; }
+.header-ring-2 { width: 160px; height: 160px; top: 20px;  right: 120px; border-color: rgba(204,188,241,0.15); }
+.header-ring-3 { width: 100px; height: 100px; bottom: -30px; left: 60%; border-color: rgba(65,204,150,0.12); }
+
+.header-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+
+.header-eyebrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(65,204,150,0.18);
+  color: var(--ihc-green);
+  font-family: 'Poppins', sans-serif;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 4px 12px; border-radius: 20px;
+  border: 1px solid rgba(65,204,150,0.3);
+  margin-bottom: 1.1rem;
+}
+
+/* inovaHC logomark text replica */
+.header-logo {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 1.4rem;
+}
+.logo-badge {
+  background: var(--ihc-green);
+  border-radius: 10px;
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.logo-badge svg { width: 28px; height: 28px; }
+.logo-text { font-family: 'Poppins', sans-serif; }
+.logo-text .inova { font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.7); display: block; line-height: 1; }
+.logo-text .ihc   { font-size: 22px; font-weight: 800; color: white; display: block; line-height: 1; letter-spacing: -0.5px; }
+
+.header h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2rem; font-weight: 800;
+  line-height: 1.15; color: white;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+}
+.header h1 em { font-style: italic; color: var(--ihc-green); font-weight: 800; }
+
+.header-sub {
+  font-size: 0.875rem; color: rgba(255,255,255,0.6);
+  max-width: 540px; line-height: 1.65;
+}
+
+/* ── Layout ──────────────────────────────────────────────────────────── */
+.container { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 3rem; }
+
+/* ── Type selector ───────────────────────────────────────────────────── */
+.type-card {
+  background: var(--surface);
+  border-radius: var(--radius-card);
+  padding: 1.4rem 1.5rem;
+  margin-bottom: 1.75rem;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+.type-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--text-soft); margin-bottom: 0.75rem;
+}
+.type-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.type-pill {
+  padding: 7px 18px;
+  border-radius: 24px;
+  border: 1.5px solid var(--border);
+  background: white;
+  font-family: 'Mulish', sans-serif;
+  font-size: 13px; font-weight: 600;
+  color: var(--text-mid);
+  cursor: pointer; transition: all 0.15s;
+}
+.type-pill:hover { border-color: var(--ihc-teal); color: var(--ihc-teal); }
+.type-pill.active {
+  background: var(--ihc-teal);
+  border-color: var(--ihc-teal);
+  color: white;
+}
+
+/* ── TRL sections ────────────────────────────────────────────────────── */
+.trl-section {
+  margin-bottom: 1rem;
+  background: var(--surface);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.trl-header {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 1.1rem 1.5rem;
+  cursor: pointer; user-select: none;
+  transition: background 0.1s;
+}
+.trl-header:hover { background: #F0FBF6; }
+
+.trl-badge {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px; font-weight: 800;
+  flex-shrink: 0;
+}
+/* TRL color scale — inovaHC palette */
+.trl-1  .trl-badge { background: #FDE8E7; color: #C0392B; }
+.trl-2  .trl-badge { background: #FDEBD0; color: #935116; }
+.trl-3  .trl-badge { background: #FEF9C3; color: #7D6608; }
+.trl-4  .trl-badge { background: #EAFAF1; color: #1E8449; }
+.trl-5  .trl-badge { background: #D5F5E3; color: #1A7A44; }
+.trl-6  .trl-badge { background: #BEEFD9; color: #047474; }
+.trl-7  .trl-badge { background: #A9DFBF; color: #035555; }
+.trl-8  .trl-badge { background: #CCBCF1; color: #4A2080; }
+.trl-9  .trl-badge { background: #41CC96; color: #02362F; }
+
+.trl-meta { flex: 1; }
+.trl-meta h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 1px;
+}
+.trl-meta p { font-size: 11.5px; color: var(--text-soft); }
+
+.trl-progress {
+  display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+}
+.score-pill {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px; font-weight: 700;
+  padding: 3px 12px; border-radius: 20px;
+  background: #EBF5F0; color: var(--text-soft);
+  border: 1px solid var(--border);
+  white-space: nowrap; transition: all 0.2s;
+}
+.score-pill.done { background: var(--ihc-green-pale); color: var(--ihc-teal); border-color: var(--ihc-green); }
+.chevron { font-size: 13px; color: var(--text-soft); transition: transform 0.2s; flex-shrink: 0; }
+.chevron.open { transform: rotate(180deg); }
+
+/* ── Questions ───────────────────────────────────────────────────────── */
+.trl-questions {
+  padding: 0 1.5rem 1.25rem;
+  border-top: 1px solid #EBF5F0;
+  display: none;
+}
+.trl-questions.open { display: block; }
+
+.level-desc {
+  font-size: 11.5px; color: var(--ihc-teal);
+  font-style: italic; padding: 10px 0 6px;
+  font-family: 'Mulish', sans-serif;
+}
+
+.question-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid #F0FBF6;
+}
+.question-item:last-child { border-bottom: none; }
+
+.question-text {
+  flex: 1; font-size: 13px; line-height: 1.55;
+  color: var(--text-mid);
+}
+
+.toggle-group { display: flex; gap: 4px; flex-shrink: 0; padding-top: 1px; }
+.toggle-btn {
+  width: 34px; height: 26px; border-radius: 7px;
+  border: 1.5px solid var(--border);
+  background: white; font-family: 'Poppins', sans-serif;
+  font-size: 11px; font-weight: 700;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all 0.12s; color: var(--text-soft);
+}
+.toggle-btn:hover { border-color: var(--ihc-teal); color: var(--ihc-teal); }
+.toggle-btn.yes { background: var(--ihc-teal); border-color: var(--ihc-teal); color: white; }
+.toggle-btn.no  { background: #FDE8E7; border-color: #F5A9A1; color: #C0392B; }
+
+/* ── Result panel ────────────────────────────────────────────────────── */
+.result-panel {
+  background: var(--ihc-teal);
+  border-radius: var(--radius-card);
+  padding: 2rem 2rem 1.75rem;
+  margin-top: 2rem;
+  color: white;
+  position: relative;
+  overflow: visible; /* fix: was hidden, caused white circle on print */
+}
+/* ring decorations — no overflow:hidden issue since we use overflow:visible */
+.result-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 22px solid rgba(65,204,150,0.15);
+  pointer-events: none;
+  top: -50px; right: -50px;
+  width: 200px; height: 200px;
+}
+.result-ring-2 {
+  position: absolute;
+  border-radius: 50%;
+  border: 14px solid rgba(204,188,241,0.12);
+  pointer-events: none;
+  bottom: -30px; left: 60px;
+  width: 120px; height: 120px;
+}
+
+.result-eyebrow {
+  font-family: 'Poppins', sans-serif;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255,255,255,0.5); margin-bottom: 0.4rem;
+}
+.result-trl-number {
+  font-family: 'Poppins', sans-serif;
+  font-size: 5.5rem; font-weight: 800; line-height: 1;
+  color: var(--ihc-green); margin-bottom: 0.2rem;
+}
+.result-trl-name {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.15rem; font-weight: 700; color: white; margin-bottom: 0.4rem;
+}
+.result-desc {
+  font-size: 0.82rem; color: rgba(255,255,255,0.55);
+  line-height: 1.65; max-width: 480px; margin-bottom: 1.5rem;
+}
+
+/* progress bar */
+.result-bar-wrap {
+  background: rgba(255,255,255,0.12);
+  border-radius: 6px; height: 7px; overflow: hidden;
+}
+.result-bar-fill {
+  height: 100%; background: var(--ihc-green);
+  border-radius: 6px; transition: width 0.5s ease;
+}
+.result-bar-labels {
+  display: flex; justify-content: space-between;
+  font-size: 10px; color: rgba(255,255,255,0.3);
+  margin-top: 5px;
+}
+
+/* stats grid */
+.result-stats {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1rem; margin-top: 1.5rem;
+}
+.stat-card {
+  background: rgba(255,255,255,0.08);
+  border-radius: 10px; padding: 0.9rem 1rem;
+}
+.stat-value {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.6rem; font-weight: 800; color: var(--ihc-green);
+}
+.stat-label { font-size: 10.5px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+
+/* conformidade tooltip */
+.stat-tooltip {
+  font-size: 10px; color: rgba(255,255,255,0.3);
+  margin-top: 4px; line-height: 1.4;
+}
+
+/* TRL step dots */
+.trl-dots { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 1.5rem; }
+.trl-dot {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px; font-weight: 700;
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.3);
+  transition: all 0.3s;
+}
+.trl-dot.past    { background: rgba(65,204,150,0.35); color: var(--ihc-green-pale); }
+.trl-dot.current { background: var(--ihc-green); color: #02362F; font-size: 13px; }
+
+/* disclaimer */
+.disclaimer {
+  margin-top: 1.5rem;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px; padding: 0.8rem 1rem;
+  font-size: 11px; color: rgba(255,255,255,0.35); line-height: 1.6;
+}
+
+/* reset btn */
+.reset-btn {
+  margin-top: 1.25rem;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.65);
+  padding: 8px 18px; border-radius: 8px;
+  font-family: 'Mulish', sans-serif;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all 0.15s;
+}
+.reset-btn:hover { background: rgba(255,255,255,0.16); color: white; }
+
+/* ── Footer ──────────────────────────────────────────────────────────── */
+.footer {
+  text-align: center; padding: 2rem 1rem;
+  font-size: 11px; color: var(--text-soft);
+}
+.footer strong { color: var(--ihc-teal); }
+
+/* ── Responsive ──────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .header h1 { font-size: 1.5rem; }
+  .result-trl-number { font-size: 4rem; }
+  .result-stats { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── PRINT ───────────────────────────────────────────────────────────── */
+@media print {
+  /* remove decorative rings that bleed outside box */
+  .header-ring, .result-ring, .result-ring-2 { display: none !important; }
+
+  body { background: white; }
+  .header { padding: 1.5rem; break-after: avoid; }
+
+  .trl-section { break-inside: avoid; box-shadow: none; border: 1px solid #C8E6D8; }
+  .trl-questions { display: block !important; }   /* show all expanded */
+  .chevron { display: none; }
+
+  .result-panel {
+    break-inside: avoid;
+    background: var(--ihc-teal) !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    border-radius: 10px;
+    overflow: visible;
+  }
+
+  .type-card { box-shadow: none; }
+  .reset-btn { display: none; }
+
+  /* ensure toggle buttons show their state in B&W fallback */
+  .toggle-btn.yes::after { content: ' ✓'; }
+  .toggle-btn.no::after  { content: ' ✗'; }
+}
+
+/* ── Identification step ─────────────────────────────────────────────── */
+.id-card {
+  background: var(--surface);
+  border-radius: var(--radius-card);
+  padding: 1.6rem 1.8rem;
+  margin-bottom: 1.75rem;
+  border: 2px solid var(--ihc-green);
+  box-shadow: 0 0 0 4px rgba(65,204,150,0.08);
+}
+.id-card-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px; font-weight: 700;
+  color: var(--ihc-teal); margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 8px;
+}
+.id-card-title::before {
+  content: '01';
+  background: var(--ihc-teal); color: white;
+  font-size: 10px; font-weight: 800;
+  padding: 2px 7px; border-radius: 20px;
+}
+.id-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 600px) { .id-grid { grid-template-columns: 1fr; } }
+.id-field { display: flex; flex-direction: column; gap: 5px; }
+.id-field.full { grid-column: 1 / -1; }
+.id-label {
+  font-size: 10.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-soft);
+}
+.id-input {
+  padding: 9px 13px;
+  border-radius: 9px;
+  border: 1.5px solid var(--border);
+  background: white;
+  font-family: 'Mulish', sans-serif;
+  font-size: 13.5px; color: var(--text);
+  transition: border-color 0.15s;
+  outline: none;
+}
+.id-input:focus { border-color: var(--ihc-teal); box-shadow: 0 0 0 3px rgba(4,116,116,0.1); }
+.id-input::placeholder { color: var(--text-soft); }
+select.id-input { cursor: pointer; }
+
+/* ── Airtable send button ─────────────────────────────────────────────── */
+.send-wrap {
+  margin-top: 1.5rem;
+  display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+}
+.btn-send {
+  background: var(--ihc-green);
+  color: #02362F;
+  border: none;
+  padding: 11px 22px; border-radius: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all 0.15s;
+  display: flex; align-items: center; gap: 7px;
+}
+.btn-send:hover { background: #2eb87f; transform: translateY(-1px); }
+.btn-send:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.btn-send-icon { font-size: 15px; }
+
+.send-status {
+  font-size: 12px; font-weight: 600;
+  padding: 6px 14px; border-radius: 8px;
+  display: none;
+}
+.send-status.ok  { background: var(--ihc-green-pale); color: var(--ihc-teal); display: inline-block; }
+.send-status.err { background: #FDE8E7; color: #C0392B; display: inline-block; }
+
+/* ── Setup modal ──────────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(4,40,40,0.55);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000; padding: 1rem;
+  opacity: 0; pointer-events: none; transition: opacity 0.2s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: white; border-radius: 16px;
+  padding: 2rem; max-width: 520px; width: 100%;
+  max-height: 85vh; overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(4,40,40,0.25);
+  transform: translateY(12px); transition: transform 0.2s;
+}
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px; font-weight: 700;
+  color: var(--ihc-teal); margin-bottom: 0.4rem;
+}
+.modal-sub { font-size: 12px; color: var(--text-soft); margin-bottom: 1.2rem; line-height: 1.6; }
+.modal-step {
+  background: var(--bg); border-radius: 9px;
+  padding: 0.9rem 1rem; margin-bottom: 0.75rem;
+  font-size: 12.5px; line-height: 1.65; color: var(--text-mid);
+}
+.modal-step strong { color: var(--ihc-teal); }
+.modal-step code {
+  background: #E0F5EC; color: var(--ihc-teal-dark);
+  padding: 1px 6px; border-radius: 4px;
+  font-size: 11px; font-family: monospace;
+}
+.modal-field { margin-top: 1rem; }
+.modal-field label {
+  display: block; font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-soft); margin-bottom: 5px;
+}
+.modal-field input {
+  width: 100%; padding: 9px 13px;
+  border-radius: 9px; border: 1.5px solid var(--border);
+  font-family: 'Mulish', sans-serif; font-size: 13px;
+  color: var(--text); outline: none;
+}
+.modal-field input:focus { border-color: var(--ihc-teal); }
+.modal-btns { display: flex; gap: 8px; margin-top: 1.2rem; }
+.btn-modal-save {
+  flex: 1; background: var(--ihc-teal); color: white;
+  border: none; padding: 10px; border-radius: 9px;
+  font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 700;
+  cursor: pointer;
+}
+.btn-modal-close {
+  background: #F0F4F4; color: var(--text-mid);
+  border: none; padding: 10px 18px; border-radius: 9px;
+  font-family: 'Mulish', sans-serif; font-size: 13px; font-weight: 600;
+  cursor: pointer;
+}
+.webhook-saved-badge {
+  display: none; font-size: 11px; color: var(--ihc-teal);
+  background: var(--ihc-green-pale); padding: 3px 10px;
+  border-radius: 20px; font-weight: 600;
+}
+.webhook-saved-badge.visible { display: inline-block; }
+
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ─────────────────────────────────────────────────────────── -->
+<div class="header">
+  <div class="header-ring"></div>
+  <div class="header-ring header-ring-2"></div>
+  <div class="header-ring header-ring-3"></div>
+  <div class="header-inner">
+    <div class="header-logo">
+      <div class="logo-badge">
+        <!-- inovaHC "iHC" mark in SVG -->
+        <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <text x="2" y="20" font-family="Arial" font-weight="900" font-size="18" fill="white">i</text>
+          <text x="10" y="20" font-family="Arial" font-weight="900" font-size="18" fill="white">HC</text>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="inova">inova</span>
+        <span class="ihc">iHC</span>
+      </div>
+    </div>
+    <div class="header-eyebrow">Inovação em Saúde · HCFMUSP</div>
+    <h1>Calculadora de <em>Maturidade</em><br>Tecnológica — TRL</h1>
+    <p class="header-sub">Avalie o nível de prontidão tecnológica da sua solução em saúde com base nos critérios ISO 16290, adaptados para tecnologias médicas, digitais e biotecnológicas.</p>
+  </div>
+</div>
+
+<!-- ── CONTENT ────────────────────────────────────────────────────────── -->
+<div class="container">
+
+  <div class="type-card">
+    <div class="type-label">Tipo de solução</div>
+    <div class="type-pills">
+      <button class="type-pill active" data-type="geral"   onclick="setType(this)">Geral / Dispositivo Médico</button>
+      <button class="type-pill"        data-type="farma"   onclick="setType(this)">Fármaco / Biofármaco</button>
+      <button class="type-pill"        data-type="digital" onclick="setType(this)">Saúde Digital / Software</button>
+    </div>
+  </div>
+
+
+  <!-- Identification step -->
+  <div class="id-card">
+    <div class="id-card-title">Identificação da Solução</div>
+    <div class="id-grid">
+      <div class="id-field full">
+        <span class="id-label">Nome da Solução *</span>
+        <input class="id-input" id="sol-nome" type="text" placeholder="Ex.: NeuroStack, DermAI, BioPatch..." oninput="updateSolInfo()">
+      </div>
+      <div class="id-field">
+        <span class="id-label">Responsável / Equipe</span>
+        <input class="id-input" id="sol-resp" type="text" placeholder="Nome ou equipe avaliadora" oninput="updateSolInfo()">
+      </div>
+      <div class="id-field">
+        <span class="id-label">Data da avaliação</span>
+        <input class="id-input" id="sol-data" type="date" oninput="updateSolInfo()">
+      </div>
+
+    </div>
+  </div>
+
+  <div id="trl-container"></div>
+
+  <!-- Result -->
+  <div class="result-panel" id="result-panel">
+    <div class="result-ring"></div>
+    <div class="result-ring-2"></div>
+    <div class="result-eyebrow">TRL Estimado</div>
+    <div class="result-trl-number" id="res-num">–</div>
+    <div class="result-trl-name"   id="res-name">Responda os critérios acima</div>
+    <div class="result-desc"       id="res-desc">O TRL é calculado automaticamente conforme você responde os critérios de cada nível. Marque "S" para sim e "N" para não.</div>
+    <div class="result-bar-wrap"><div class="result-bar-fill" id="res-bar" style="width:0%"></div></div>
+    <div class="result-bar-labels"><span>TRL 1</span><span>TRL 9</span></div>
+    <div class="result-stats">
+      <div class="stat-card">
+        <div class="stat-value" id="res-answered">0</div>
+        <div class="stat-label">critérios respondidos</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="res-yes">0</div>
+        <div class="stat-label">critérios atendidos (Sim)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="res-pct">–</div>
+        <div class="stat-label">% de conformidade</div>
+        <div class="stat-tooltip">Proporção de critérios respondidos marcados como "Sim", sobre o total respondido (excluindo não respondidos).</div>
+      </div>
+    </div>
+    <div class="trl-dots" id="trl-dots"></div>
+    <div class="disclaimer">
+      O TRL é uma estimativa baseada nos critérios respondidos. Um nível é considerado atingido quando ≥70% dos critérios respondidos são "Sim". Níveis com critérios não respondidos interrompem a contagem. Para avaliação formal, consulte especialistas e utilize esta ferramenta como apoio ao diálogo com financiadores e parceiros.
+    </div>
+
+    <!-- Airtable send -->
+    <div class="send-wrap">
+      <button class="btn-send" id="btn-send" onclick="sendToAirtable()">
+        <span class="btn-send-icon">⬆</span> Salvar resultado no Airtable
+      </button>
+      <button class="reset-btn" style="margin-top:0" onclick="resetAll()">↺ Reiniciar</button>
+      <span class="send-status" id="send-status"></span>
+      <span class="webhook-saved-badge" id="webhook-badge">webhook configurado ✓</span>
+    </div>
+    <div style="margin-top:0.75rem">
+      <button onclick="openModal()" style="background:none;border:none;font-size:11px;color:rgba(255,255,255,0.35);cursor:pointer;text-decoration:underline;font-family:'Mulish',sans-serif;">
+        ⚙ Configurar integração com Airtable
+      </button>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="footer">
+  Desenvolvido por <strong>inovaHC – HCFMUSP</strong> · Baseado na norma ISO 16290 · Metodologia adaptada para soluções em saúde
+</div>
+
+<script>
+/* ── DATA ──────────────────────────────────────────────────────────────── */
+const TIPOS = {
+  geral: {
+    label: "Dispositivo Médico / Produto de Saúde",
+    levels: [
+      { name:"Princípios básicos identificados", subtitle:"TRL 1 – Ideação", description:"Princípios básicos observados e reportados", questions:[
+        "Os princípios científicos e clínicos básicos que sustentam a solução foram identificados e documentados?",
+        "Potenciais aplicações terapêuticas, diagnósticas ou de apoio à saúde foram identificadas?",
+        "Estudos ou publicações científicas que confirmam a viabilidade dos princípios foram levantados?",
+        "Leis, regulamentações sanitárias e pressupostos científicos que regem o desenvolvimento foram identificados?",
+        "Existe uma ideia inicial dos riscos, custos e cronograma para o desenvolvimento da solução?",
+        "Foi identificado quem realizará a pesquisa e em qual instituição (universidade, hospital, centro de pesquisa)?",
+        "Há interesse de financiadores, investidores ou stakeholders na concretização da solução?",
+        "Foi verificado se outras instituições nacionais estão desenvolvendo solução semelhante?",
+        "Publicações científicas relevantes sobre a tecnologia foram identificadas (periódicos, anais, congressos)?"
+      ]},
+      { name:"Conceito tecnológico formulado", subtitle:"TRL 2 – Concepção", description:"Concepção tecnológica e/ou aplicação formulada", questions:[
+        "As aplicações clínicas ou de saúde foram formalmente descritas?",
+        "A população-alvo (pacientes, profissionais de saúde, gestores) foi identificada?",
+        "As funções principais que a solução deve desempenhar foram definidas?",
+        "A viabilidade das aplicações foi confirmada por estudos ou revisões da literatura?",
+        "A necessidade clínica ou de saúde pública que a solução endereça foi descrita?",
+        "Lacunas (GAPs) tecnológicos ou científicos foram identificados e documentados?",
+        "O problema de saúde ou programa assistencial que a solução vai apoiar foi definido?",
+        "Clientes ou usuários finais potenciais (hospitais, clínicas, pacientes) foram identificados?",
+        "Algum usuário final ou cliente demonstrou interesse na aplicação?"
+      ]},
+      { name:"Prova de conceito experimental", subtitle:"TRL 3 – Prova de Conceito", description:"Prova de conceitos das funções críticas de forma analítica ou experimental", questions:[
+        "O conceito técnico da solução foi elaborado e documentado?",
+        "Os requisitos de desempenho clínico e técnico foram especificados?",
+        "A viabilidade da aplicação foi verificada por experimentos laboratoriais, estudos in vitro ou simulações?",
+        "Possíveis falhas ou limitações tecnológicas foram identificadas em ambiente laboratorial?",
+        "Os componentes ou módulos que devem trabalhar em conjunto foram identificados (visão sistêmica)?",
+        "A viabilidade científica da solução foi demonstrada de forma satisfatória?",
+        "As técnicas de desenvolvimento e os métodos de análise foram definidos?",
+        "Aspectos regulatórios relevantes (ANVISA, requisitos de ensaios clínicos) foram considerados?",
+        "Os componentes críticos para o desenvolvimento foram identificados?",
+        "Existe estimativa documentada de riscos, custos e cronograma para o desenvolvimento do protótipo?"
+      ]},
+      { name:"Validação em laboratório", subtitle:"TRL 4 – Otimização", description:"Validação em ambiente de laboratório de componentes ou arranjos experimentais básicos", questions:[
+        "O projeto conceitual da solução foi realizado?",
+        "Componentes individuais foram testados em laboratório com relatórios documentados?",
+        "Os GAPs tecnológicos foram plenamente identificados?",
+        "Os requisitos gerais do sistema para os usuários finais (profissionais e pacientes) foram levantados?",
+        "Métricas de desempenho clínico e técnico foram estabelecidas?",
+        "Os custos estimados para desenvolvimento do protótipo foram levantados?",
+        "Um cronograma para o desenvolvimento do protótipo foi elaborado?",
+        "Um programa inicial de gestão de risco foi iniciado (ex.: análise de modos de falha)?",
+        "Estudos iniciais de integração da tecnologia ao sistema de saúde ou fluxo clínico foram iniciados?"
+      ]},
+      { name:"Validação em ambiente relevante", subtitle:"TRL 5 – Prototipagem", description:"Validação em ambiente relevante de componentes com configuração física final", questions:[
+        "Os requisitos de desempenho em ambiente clínico ou relevante foram preliminarmente definidos?",
+        "Um projeto preliminar da solução foi realizado, suportado por modelos validados?",
+        "Um plano de testes para as funções críticas, incluindo análise de efeitos de escala, foi elaborado?",
+        "Uma plataforma de ensaio para verificação das funções críticas foi definida?",
+        "Testes da plataforma de ensaio foram realizados e documentados com relatórios?",
+        "Os efeitos de possíveis falhas da solução foram identificados e analisados?",
+        "Os requisitos de integração com sistemas de saúde (ex.: prontuário, equipamentos) foram identificados?",
+        "As interações entre componentes e subsistemas foram mapeadas?",
+        "Modificações para aproximar o ambiente de laboratório ao ambiente clínico real foram realizadas?",
+        "Testes tecnológicos dos componentes em ambiente relevante foram realizados?"
+      ]},
+      { name:"Demonstração do protótipo em ambiente relevante", subtitle:"TRL 6 – Escalonamento", description:"Modelo do sistema/subsistema com protótipo demonstrador em ambiente relevante", questions:[
+        "As funções críticas da solução foram identificadas, analisadas e verificadas em ambiente relevante?",
+        "O ambiente clínico ou operacional para implantação da solução é conhecido e documentado?",
+        "Os requisitos de desempenho e as condições do ambiente relevante foram formalizados?",
+        "Os requisitos completos de sistema e subsistema foram documentados?",
+        "As características de desempenho foram avaliadas mesmo na presença de GAPs conhecidos?",
+        "Dados iniciais de manutenção, confiabilidade e suporte foram coletados?",
+        "O protótipo representativo foi testado em laboratório ou ambiente simulado de alta fidelidade clínica?"
+      ]},
+      { name:"Demonstração do protótipo em ambiente operacional", subtitle:"TRL 7 – Demonstração em ambiente real", description:"Protótipo do demonstrador do sistema em ambiente operacional", questions:[
+        "Os requisitos de desempenho foram documentados de forma completa?",
+        "O ambiente operacional (hospital, UBS, domicílio, laboratório clínico) foi documentado?",
+        "O modelo de protótipo e o plano de testes foram definidos e documentados?",
+        "Testes em cada interface do sistema (incluindo integração com sistemas hospitalares) foram realizados?",
+        "As funcionalidades disponíveis foram demonstradas em ambiente operacional real ou simulado?",
+        "O protótipo foi integralmente testado em ambiente operacional (ex.: estudo piloto, uso supervisionado)?",
+        "Os testes do protótipo do sistema foram realizados com sucesso em cenário real ou simulado?",
+        "A documentação dos testes do protótipo foi completada?",
+        "Existe estimativa de riscos, custos e cronograma para escalonamento da solução?"
+      ]},
+      { name:"Sistema qualificado e finalizado", subtitle:"TRL 8 – Produção", description:"Sistema completo, testado, qualificado e demonstrado", questions:[
+        "O produto final foi construído e integrado ao sistema de saúde de destino?",
+        "Os ajustes dos componentes às suas funções foram realizados para compatibilidade com o ambiente operacional?",
+        "O sistema foi testado e caracterizado conforme seu design e aplicação pretendida?",
+        "Os resultados de desempenho foram demonstrados em testes de plataforma real ou em estudo clínico?",
+        "O processo de controle de interface (integração com outros sistemas) foi concluído?",
+        "A documentação regulatória formal foi concluída (ex.: submissão ANVISA, dossiê técnico)?",
+        "A documentação de gestão e controle de configuração foi concluída?",
+        "Todas as funcionalidades foram demonstradas em ambiente operacional e o sistema foi qualificado por testes e avaliações?",
+        "O sistema foi validado e atende às especificações clínicas e técnicas definidas?",
+        "Um programa de gestão de risco em parceria com a indústria ou parceiro de implementação foi iniciado?",
+        "Os custos para escalonamento ou a transferência de conhecimento ao parceiro industrial foram definidos?"
+      ]},
+      { name:"Sistema operando em ambiente real", subtitle:"TRL 9 – Produção Continuada", description:"Sistema já foi operado em todas as condições, extensão e alcance", questions:[
+        "O sistema real foi plenamente demonstrado em condições operacionais reais?",
+        "O conceito operacional foi implementado com sucesso no ambiente de saúde pretendido?",
+        "A solução foi implantada e está em uso em serviço de saúde real?",
+        "O sistema foi validado através de operações bem-sucedidas em ambiente real (estudos clínicos, uso em serviço)?",
+        "Os processos de fabricação ou desenvolvimento estão controlados para nível de qualidade adequado?",
+        "A documentação inclui o processo de escalonamento, custos e cronograma de expansão?",
+        "A documentação final inclui o processo de parceria e transferência de conhecimento para a indústria ou serviço de saúde?",
+        "Um plano de negócio para desenvolvimento e comercialização da tecnologia foi elaborado?",
+        "Publicações científicas, patentes ou registros sobre a tecnologia foram realizados?",
+        "É possível reproduzir a solução com os mesmos requisitos de qualidade, segurança e eficácia?"
+      ]}
+    ]
+  },
+
+  farma: {
+    label: "Fármaco / Biofármaco / Fitofármaco",
+    levels: [
+      { name:"Princípios básicos identificados", subtitle:"TRL 1 – Ideia da Pesquisa", description:"Princípios básicos observados e reportados. Foco em descoberta de novas moléculas.", questions:[
+        "Os mecanismos biológicos e farmacológicos básicos que sustentam a solução foram identificados e documentados?",
+        "Alvos terapêuticos potenciais (receptores, enzimas, biomarcadores) foram identificados a partir da literatura?",
+        "Publicações científicas revisadas por pares confirmando os princípios básicos foram levantadas?",
+        "A hipótese de mecanismo de ação do alvo terapêutico está descrita e documentada?",
+        "Há uma ideia inicial dos riscos, custos e cronograma para a pesquisa farmacológica?",
+        "Foi identificado quem e onde será realizada a pesquisa (laboratório, grupo de pesquisa, instituição)?",
+        "Há interesse de financiadores ou patrocinadores (FINEP, BNDES, investidores) no desenvolvimento?",
+        "Foi verificado o estado da arte e patentes relacionados ao alvo terapêutico ou molécula candidata?"
+      ]},
+      { name:"Conceito tecnológico formulado", subtitle:"TRL 2 – Pesquisa Básica", description:"Hipóteses e projetos experimentais desenvolvidos. Alvos terapêuticos identificados.", questions:[
+        "Hipóteses de pesquisa e protocolos experimentais foram desenvolvidos e documentados?",
+        "Potenciais alvos terapêuticos para intervenção foram identificados e justificados?",
+        "Modelos in vitro ou in silico iniciais foram definidos para testar as hipóteses?",
+        "A doença ou condição de saúde-alvo foi descrita com epidemiologia e necessidade clínica?",
+        "Lacunas de conhecimento e riscos científicos foram identificados e documentados?",
+        "Especialistas clínicos ou parceiros hospitalares foram envolvidos na definição do conceito?",
+        "O potencial de diferenciação terapêutica em relação a tratamentos existentes foi avaliado?"
+      ]},
+      { name:"Prova de conceito experimental", subtitle:"TRL 3 – Pesquisa Aplicada", description:"Teste das hipóteses em número limitado de modelos in vitro e in vivo para drogas candidatas.", questions:[
+        "As hipóteses foram testadas em modelos in vitro (culturas celulares, ensaios bioquímicos)?",
+        "Ensaios in vivo iniciais (modelo animal) foram realizados para confirmar o mecanismo de ação?",
+        "A prova de conceito (PoC) foi demonstrada em modelos pré-clínicos iniciais?",
+        "A toxicidade inicial da substância candidata foi avaliada em modelos in vitro?",
+        "Estudos farmacodinâmicos básicos foram realizados para confirmar o efeito no alvo?",
+        "Os componentes críticos da formulação foram identificados?",
+        "Existe estimativa documentada de riscos, custos e cronograma para desenvolvimento pré-clínico?"
+      ]},
+      { name:"Validação em laboratório", subtitle:"TRL 4 – Prova de Conceito", description:"Validação de drogas candidatas a partir de provas de conceito em modelos de laboratório.", questions:[
+        "A substância candidata foi validada em modelos in vitro e in vivo mais complexos?",
+        "Ensaios não-clínicos (in vitro) de toxicidade, genotoxicidade e segurança foram realizados?",
+        "A eficácia farmacológica foi confirmada em modelos animais de doença relevantes?",
+        "A estratégia regulatória para registro no Brasil (ANVISA) foi esboçada?",
+        "Os principais parâmetros farmacocinéticos (absorção, distribuição, metabolismo, excreção) foram avaliados?",
+        "Os custos estimados para os estudos pré-clínicos avançados foram levantados?",
+        "A forma farmacêutica preliminar foi definida e testada?"
+      ]},
+      { name:"Validação em ambiente relevante", subtitle:"TRL 5 – Teste em Escala Piloto", description:"Estudos pré-clínicos incluindo análises farmacológicas, farmacocinéticas e toxicológicas.", questions:[
+        "Estudos pré-clínicos completos (toxicologia, farmacocinética, farmacodinâmica) foram realizados conforme BPL?",
+        "Um processo de fabricação em escala piloto foi desenvolvido e demonstrado?",
+        "A estratégia regulatória (ANVISA/IND) para o início dos estudos clínicos foi definida?",
+        "As propriedades farmacológicas foram confirmadas e repetidas em ensaios padronizados?",
+        "Ensaios analíticos e de caracterização da substância ativa foram realizados em conformidade com as BPL?",
+        "A solicitação de autorização para início de estudos clínicos (ANVISA) foi preparada?",
+        "Os critérios de inclusão e exclusão para a Fase I clínica foram definidos?"
+      ]},
+      { name:"Demonstração em ambiente relevante", subtitle:"TRL 6 – Estudos Clínicos Fase I", description:"Estudos clínicos Fase I: tolerância e segurança em número restrito de voluntários sadios.", questions:[
+        "A autorização para início de estudos clínicos foi obtida junto à ANVISA?",
+        "Os estudos clínicos de Fase I foram concluídos (segurança e tolerância em voluntários sadios)?",
+        "O perfil de segurança inicial do produto foi estabelecido?",
+        "A dose máxima tolerada (DMT) e a faixa de dose terapêutica foram identificadas?",
+        "O perfil farmacocinético em humanos foi caracterizado?",
+        "Os resultados da Fase I foram documentados e submetidos/publicados?",
+        "O processo de fabricação em escala relevante foi demonstrado?"
+      ]},
+      { name:"Demonstração do protótipo em ambiente operacional", subtitle:"TRL 7 – Estudos Clínicos Fase II", description:"Conclusão dos Estudos Clínicos Fase 2 e procedimentos de registro da Fase 3.", questions:[
+        "Os estudos clínicos de Fase II (eficácia e segurança na população-alvo) foram concluídos?",
+        "A dose terapêutica ótima foi estabelecida?",
+        "Os procedimentos para o início dos estudos de Fase III foram preparados?",
+        "O protocolo de Fase III foi aprovado pelo CEP/CONEP e ANVISA?",
+        "Os dados de Fase II foram documentados e o dossier de Fase III foi elaborado?",
+        "A escala de produção para os estudos de Fase III foi estabelecida?",
+        "Parceiros clínicos (hospitais, CROs) para a Fase III foram identificados e contratados?"
+      ]},
+      { name:"Sistema qualificado e finalizado", subtitle:"TRL 8 – Estudos Clínicos Fase III", description:"Conclusão dos Estudos Clínicos Fase 3 e procedimentos de registro na autoridade sanitária.", questions:[
+        "Os estudos clínicos de Fase III foram concluídos com sucesso (eficácia e segurança)?",
+        "O dossiê de registro foi submetido à ANVISA?",
+        "O registro sanitário do produto foi obtido junto à ANVISA?",
+        "O processo de fabricação em escala comercial está validado conforme as BPF?",
+        "A documentação de qualidade, segurança e eficácia está completa para fins regulatórios?",
+        "Parceiros de produção ou licenciamento foram identificados?",
+        "Um plano de farmacovigilância pós-comercialização foi elaborado?"
+      ]},
+      { name:"Sistema operando em ambiente real", subtitle:"TRL 9 – Comercialização e Farmacovigilância", description:"Sistemas de vigilância pós-comercialização. Produto aprovado e distribuído.", questions:[
+        "O produto está aprovado e disponível no mercado brasileiro?",
+        "O sistema de farmacovigilância pós-comercialização está operacional?",
+        "A produção em escala comercial está estabelecida e controlada?",
+        "A cadeia de distribuição e logística do produto foi estabelecida?",
+        "Estudos de Fase IV (pós-comercialização) foram planejados ou iniciados?",
+        "Publicações científicas, patentes ou registros de propriedade intelectual foram realizados?",
+        "É possível reproduzir a produção com os mesmos padrões de qualidade e segurança?"
+      ]}
+    ]
+  },
+
+  digital: {
+    label: "Saúde Digital / Software / IA em Saúde",
+    levels: [
+      { name:"Princípios básicos identificados", subtitle:"TRL 1 – Conceituação Básica", description:"Princípios básicos observados e reportados. Início da formulação matemática ou algorítmica.", questions:[
+        "Os princípios científicos, matemáticos ou computacionais que sustentam a solução digital foram identificados?",
+        "A necessidade clínica ou de saúde que a solução digital endereça foi identificada e documentada?",
+        "Publicações científicas e evidências sobre aplicação de tecnologias digitais semelhantes foram levantadas?",
+        "A hipótese sobre como a solução digital pode impactar o problema de saúde foi formulada?",
+        "Existe uma ideia inicial dos riscos, custos e cronograma para o desenvolvimento?",
+        "A equipe técnica (engenheiros, cientistas de dados, clínicos) foi identificada?",
+        "Há interesse de financiadores ou parceiros estratégicos (hospitais, operadoras, governo) na solução?",
+        "Foi verificado se soluções digitais semelhantes existem no mercado nacional?"
+      ]},
+      { name:"Conceito tecnológico formulado", subtitle:"TRL 2 – Algoritmos Básicos", description:"Algoritmos ou funções básicas prototipadas e documentadas.", questions:[
+        "Os algoritmos ou funcionalidades básicas foram prototipados e documentados?",
+        "A arquitetura técnica preliminar da solução foi definida (ex.: tipo de modelo de IA, stack tecnológico)?",
+        "O fluxo de dados e informações clínicas necessários foram mapeados?",
+        "Os requisitos de dados (fontes, volume, qualidade, privacidade) foram identificados?",
+        "Possíveis vieses algorítmicos ou limitações da solução foram identificados?",
+        "A aplicação clínica específica e o fluxo de uso foram descritos?",
+        "Profissionais de saúde ou usuários finais foram consultados sobre a utilidade da solução?"
+      ]},
+      { name:"Prova de conceito experimental", subtitle:"TRL 3 – Protótipo Inicial", description:"Algoritmos executados e testados em processador representativo. Protótipo inicial.", questions:[
+        "Os algoritmos foram implementados e testados com dados reais ou representativos em ambiente controlado?",
+        "Um protótipo funcional inicial (ex.: versão alpha simplificada) foi desenvolvido?",
+        "Métricas de desempenho clínico e técnico foram definidas (ex.: acurácia, sensibilidade, especificidade)?",
+        "Testes iniciais foram realizados com dados de saúde relevantes para o problema?",
+        "Aspectos de privacidade e segurança de dados (LGPD) foram considerados na arquitetura?",
+        "A viabilidade técnica da solução foi demonstrada por meio de experimentos controlados?",
+        "Existe estimativa documentada de riscos, custos e cronograma para desenvolvimento do produto?"
+      ]},
+      { name:"Validação em laboratório", subtitle:"TRL 4 – Earliest Version", description:"Componentes básicos do software integrados. Funcionalidades básicas operando em conjunto.", questions:[
+        "Os componentes principais do software foram integrados e testados em conjunto?",
+        "Testes funcionais de todos os módulos do sistema foram realizados?",
+        "A performance do sistema (tempo de resposta, escalabilidade) foi avaliada?",
+        "O modelo de IA (se aplicável) foi treinado e validado com um conjunto de dados representativo?",
+        "A integração com fontes de dados de saúde (ex.: HL7 FHIR, prontuário eletrônico) foi testada?",
+        "Requisitos de acessibilidade e usabilidade foram levantados junto a usuários finais?",
+        "O cronograma e os custos para desenvolvimento do produto foram formalizados?"
+      ]},
+      { name:"Validação em ambiente relevante", subtitle:"TRL 5 – Versão Alfa", description:"Todos os componentes integrados em versão realística. Testado em ambiente controlado.", questions:[
+        "Uma versão alfa completa da solução foi desenvolvida e testada em ambiente controlado?",
+        "Testes com usuários finais (profissionais de saúde, pacientes) foram realizados para validação de usabilidade?",
+        "O modelo de IA (se aplicável) foi validado em conjunto de dados independente e com métricas clínicas relevantes?",
+        "A integração com infraestrutura de saúde real (ex.: HIS, LIS, PACS) foi testada em ambiente simulado?",
+        "Aspectos de segurança cibernética e privacidade foram avaliados formalmente (ex.: teste de vulnerabilidades)?",
+        "O desempenho do sistema sob condições de carga realistas foi avaliado?",
+        "A documentação técnica e clínica da versão alfa foi elaborada?"
+      ]},
+      { name:"Demonstração em ambiente relevante", subtitle:"TRL 6 – Versão Beta", description:"Protótipo completo testado em ambiente virtual ou simulado. Versão beta em desenvolvimento.", questions:[
+        "Uma versão beta do produto foi desenvolvida e está sendo testada em ambiente clínico ou operacional?",
+        "Estudos pilotos ou testes de campo em serviços de saúde reais foram iniciados?",
+        "Feedback de usuários finais (clínicos, gestores, pacientes) foi coletado e incorporado?",
+        "A estratégia regulatória para software como dispositivo médico (SaMD) junto à ANVISA foi definida?",
+        "A integração com sistemas de saúde reais foi demonstrada de forma funcional?",
+        "Dados de desempenho clínico em ambiente real (ex.: acurácia no contexto de uso real) foram coletados?",
+        "A documentação necessária para avaliação regulatória inicial foi elaborada?"
+      ]},
+      { name:"Demonstração do protótipo em ambiente operacional", subtitle:"TRL 7 – Product Release", description:"Verificação e validação concluídas. Especificação confirmada no aplicativo pretendido.", questions:[
+        "A versão de produto foi validada clinicamente em ambiente operacional real?",
+        "A solicitação de registro ou notificação como SaMD foi submetida à ANVISA (se aplicável)?",
+        "O sistema foi validado por profissionais de saúde em condições reais de uso?",
+        "O suporte técnico e organizacional para implantação foi estruturado?",
+        "Estudos de interoperabilidade com sistemas hospitalares reais foram concluídos?",
+        "O plano de monitoramento pós-implantação (performance, incidentes, alertas) foi elaborado?",
+        "A documentação técnica para auditoria e conformidade regulatória foi concluída?"
+      ]},
+      { name:"Sistema qualificado e finalizado", subtitle:"TRL 8 – General Product", description:"Fim do desenvolvimento do sistema. Versão de produção com configuração controlada.", questions:[
+        "O produto está em produção, com código-fonte versionado e controle de configuração ativo?",
+        "O sistema foi aprovado para uso clínico (registro/notificação ANVISA, se aplicável)?",
+        "A documentação técnica completa (incluindo treinamento de IA, dados utilizados, decisões de design) está disponível?",
+        "Contratos de implantação com serviços de saúde foram estabelecidos?",
+        "O processo de atualização e manutenção do sistema está formalizado?",
+        "O desempenho do sistema em produção é monitorado continuamente?",
+        "As questões éticas relacionadas ao uso de IA em saúde foram formalmente endereçadas?"
+      ]},
+      { name:"Sistema operando em ambiente real", subtitle:"TRL 9 – Live Product", description:"Sistema em uso real, sob condições operacionais e avaliação contínua.", questions:[
+        "O sistema está em uso real em serviços de saúde, com usuários ativos?",
+        "O impacto clínico da solução foi documentado (indicadores de qualidade, satisfação, eficiência)?",
+        "O sistema opera de forma estável e confiável em escala operacional?",
+        "Um processo de melhoria contínua baseado em dados reais de uso está operacional?",
+        "Publicações científicas sobre a eficácia e segurança da solução foram realizadas?",
+        "O modelo de negócio está consolidado (receita, parceiros, modelo de sustentabilidade)?",
+        "É possível replicar a implantação da solução em outros serviços de saúde com os mesmos padrões de qualidade?"
+      ]}
+    ]
+  }
+};
+
+const TRL_NAMES = ["Princípios Básicos","Concepção","Prova de Conceito","Otimização","Prototipagem","Escalonamento","Demonstração Operacional","Produção","Produção Continuada"];
+
+let currentType = 'geral';
+let answers = {};
+
+function setType(el) {
+  document.querySelectorAll('.type-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  currentType = el.dataset.type;
+  answers = {};
+  renderTRLs();
+  updateResult();
+}
+
+function renderTRLs() {
+  const container = document.getElementById('trl-container');
+  const data = TIPOS[currentType];
+  container.innerHTML = '';
+  data.levels.forEach((level, idx) => {
+    const n = idx + 1;
+    const yesCount = level.questions.filter((_,qi) => answers[`${n}-${qi}`] === true).length;
+    const total    = level.questions.length;
+    const allDone  = yesCount === total && level.questions.every((_,qi) => answers[`${n}-${qi}`] !== undefined);
+    const sec = document.createElement('div');
+    sec.className = `trl-section trl-${n}`;
+    sec.innerHTML = `
+      <div class="trl-header" onclick="toggleSection(${n})">
+        <div class="trl-badge">${n}</div>
+        <div class="trl-meta">
+          <h3>${level.name}</h3>
+          <p>${level.subtitle}</p>
+        </div>
+        <div class="trl-progress">
+          <span class="score-pill${allDone?' done':''}">${yesCount}/${total}</span>
+          <span class="chevron" id="chev-${n}">▾</span>
+        </div>
+      </div>
+      <div class="trl-questions" id="trl-q-${n}">
+        <div class="level-desc">${level.description}</div>
+        ${level.questions.map((q,qi) => `
+          <div class="question-item">
+            <div class="question-text">${q}</div>
+            <div class="toggle-group">
+              <button class="toggle-btn${answers[n+'-'+qi]===true?' yes':''}" onclick="setAnswer(${n},${qi},true)">S</button>
+              <button class="toggle-btn${answers[n+'-'+qi]===false?' no':''}"  onclick="setAnswer(${n},${qi},false)">N</button>
+            </div>
+          </div>`).join('')}
+      </div>`;
+    container.appendChild(sec);
+  });
+}
+
+function toggleSection(n) {
+  document.getElementById(`trl-q-${n}`).classList.toggle('open');
+  document.getElementById(`chev-${n}`).classList.toggle('open');
+}
+
+function setAnswer(n, qi, val) {
+  const key = `${n}-${qi}`;
+  answers[key] = answers[key] === val ? undefined : val;
+  if (answers[key] === undefined) delete answers[key];
+  renderTRLs();
+  const q = document.getElementById(`trl-q-${n}`);
+  if (!q.classList.contains('open')) { q.classList.add('open'); document.getElementById(`chev-${n}`).classList.add('open'); }
+  updateResult();
+}
+
+function calculateTRL() {
+  const levels = TIPOS[currentType].levels;
+  let trl = 0;
+  for (let i = 0; i < levels.length; i++) {
+    const n = i+1, qs = levels[i].questions;
+    const answered = qs.filter((_,qi) => answers[`${n}-${qi}`] !== undefined).length;
+    const yes      = qs.filter((_,qi) => answers[`${n}-${qi}`] === true).length;
+    if (answered === 0) break;
+    if (yes / qs.length >= 0.7) trl = n; else break;
+  }
+  return trl;
+}
+
+function updateResult() {
+  const trl  = calculateTRL();
+  const data = TIPOS[currentType];
+  const answered = Object.keys(answers).length;
+  const yes      = Object.values(answers).filter(v => v===true).length;
+  const pct      = answered > 0 ? Math.round((yes/answered)*100) : null;
+
+  document.getElementById('res-answered').textContent = answered;
+  document.getElementById('res-yes').textContent      = yes;
+  document.getElementById('res-pct').textContent      = pct !== null ? pct+'%' : '–';
+
+  if (trl === 0) {
+    document.getElementById('res-num').textContent  = '–';
+    document.getElementById('res-name').textContent = 'Responda os critérios acima';
+    document.getElementById('res-desc').textContent = 'O TRL é calculado automaticamente conforme você responde os critérios de cada nível.';
+    document.getElementById('res-bar').style.width  = '0%';
+  } else {
+    document.getElementById('res-num').textContent  = trl;
+    document.getElementById('res-name').textContent = `TRL ${trl} – ${TRL_NAMES[trl-1]}`;
+    document.getElementById('res-desc').textContent = data.levels[trl-1].description;
+    document.getElementById('res-bar').style.width  = Math.round((trl/9)*100)+'%';
+  }
+
+  const dots = document.getElementById('trl-dots');
+  dots.innerHTML = '';
+  for (let i=1; i<=9; i++) {
+    const d = document.createElement('div');
+    d.className = 'trl-dot' + (i<trl?' past':'') + (i===trl?' current':'');
+    d.textContent = i; dots.appendChild(d);
+  }
+}
+
+function resetAll() { answers={}; renderTRLs(); updateResult(); }
+
+/* ── Identification info ─────────────────────────────── */
+let solInfo = { nome:'', resp:'', data:'' };
+
+function updateSolInfo() {
+  solInfo.nome     = document.getElementById('sol-nome').value.trim();
+  solInfo.resp     = document.getElementById('sol-resp').value.trim();
+  solInfo.data     = document.getElementById('sol-data').value;
+
+}
+
+// Pre-fill today's date
+document.addEventListener('DOMContentLoaded', () => {
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('sol-data').value = today;
+  solInfo.data = today;
+  // Show webhook badge if already saved
+  const saved = localStorage.getItem('ihc_webhook_url');
+  if (saved) document.getElementById('webhook-badge').classList.add('visible');
+});
+
+/* ── Airtable send ───────────────────────────────────── */
+function buildPayload() {
+  const trl      = calculateTRL();
+  const data     = TIPOS[currentType];
+  const answered = Object.keys(answers).length;
+  const yes      = Object.values(answers).filter(v => v===true).length;
+  const pct      = answered > 0 ? Math.round((yes/answered)*100) : 0;
+
+  // Per-level summary
+  const levelSummary = data.levels.map((lvl, idx) => {
+    const n = idx+1;
+    const lvlYes = lvl.questions.filter((_,qi) => answers[`${n}-${qi}`] === true).length;
+    const lvlNo  = lvl.questions.filter((_,qi) => answers[`${n}-${qi}`] === false).length;
+    return `TRL${n}: ${lvlYes}S/${lvlNo}N de ${lvl.questions.length}`;
+  }).join(' | ');
+
+  return {
+    "Nome da Solução":      solInfo.nome || '(sem nome)',
+    "Responsável":          solInfo.resp,
+    "Data":                 solInfo.data,
+
+    "Tipo de Solução":      data.label,
+    "TRL":                  trl,
+    "Critérios Respondidos": answered,
+    "Critérios Atendidos":  yes,
+    "% Conformidade":       pct,
+    "Detalhes por Nível":   levelSummary
+  };
+}
+
+async function sendToAirtable() {
+  const webhookUrl = localStorage.getItem('ihc_webhook_url');
+  if (!webhookUrl) {
+    openModal();
+    return;
+  }
+  const trl = calculateTRL();
+  if (trl === 0) {
+    showStatus('Responda ao menos um nível completo antes de salvar.', 'err');
+    return;
+  }
+  if (!solInfo.nome) {
+    document.getElementById('sol-nome').focus();
+    document.getElementById('sol-nome').style.borderColor = '#F64943';
+    setTimeout(() => document.getElementById('sol-nome').style.borderColor = '', 2000);
+    showStatus('Informe o nome da solução primeiro.', 'err');
+    return;
+  }
+
+  const btn = document.getElementById('btn-send');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="btn-send-icon">⏳</span> Enviando...';
+
+  try {
+    await fetch(webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      mode: 'no-cors',   // Airtable/Make webhooks accept no-cors
+      body: JSON.stringify(buildPayload())
+    });
+    showStatus('✓ Resultado enviado com sucesso!', 'ok');
+  } catch(e) {
+    showStatus('Erro ao enviar. Verifique a URL do webhook.', 'err');
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<span class="btn-send-icon">⬆</span> Salvar resultado no Airtable';
+}
+
+function showStatus(msg, type) {
+  const el = document.getElementById('send-status');
+  el.textContent = msg;
+  el.className = 'send-status ' + type;
+  setTimeout(() => { el.className = 'send-status'; }, 5000);
+}
+
+/* ── Modal ───────────────────────────────────────────── */
+function openModal() {
+  const saved = localStorage.getItem('ihc_webhook_url');
+  if (saved) document.getElementById('webhook-url-input').value = saved;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+function checkWebhookInput() {}
+function saveWebhook() {
+  const url = document.getElementById('webhook-url-input').value.trim();
+  if (!url) return;
+  localStorage.setItem('ihc_webhook_url', url);
+  document.getElementById('webhook-badge').classList.add('visible');
+  closeModal();
+  showStatus('Webhook salvo! Agora clique em "Salvar resultado".', 'ok');
+}
+
+renderTRLs(); updateResult();
+</script>
+
+<!-- Airtable setup modal -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <h3>⚙ Integração com Airtable</h3>
+    <p class="modal-sub">Para salvar os resultados automaticamente numa base Airtable, siga os passos abaixo e cole a URL do webhook.</p>
+    <div class="modal-step"><strong>Passo 1 —</strong> No Airtable, crie uma base com as colunas:<br>
+      <code>Nome da Solução</code> · <code>Responsável</code> · <code>Data</code> · <code>Tipo de Solução</code> · <code>TRL</code> · <code>Critérios Respondidos</code> · <code>Critérios Atendidos</code> · <code>% Conformidade</code> · <code>Detalhes por Nível</code>
+    </div>
+    <div class="modal-step"><strong>Passo 2 —</strong> Em <em>Automations</em> no Airtable, crie uma automação com gatilho <strong>"When webhook received"</strong>. Copie a URL gerada.</div>
+    <div class="modal-step"><strong>Passo 3 —</strong> Configure a ação da automação para criar um registro na base com os campos acima mapeados para o JSON recebido.</div>
+    <div class="modal-step"><strong>Alternativa mais simples —</strong> Use <strong>Make.com</strong> (gratuito) ou <strong>n8n</strong>: crie um fluxo que recebe webhook → cria registro no Airtable. Mais fácil de mapear os campos.</div>
+    <div class="modal-field">
+      <label>URL do Webhook</label>
+      <input type="url" id="webhook-url-input" placeholder="https://hooks.airtable.com/... ou https://hook.make.com/..." oninput="checkWebhookInput()">
+    </div>
+    <div class="modal-btns">
+      <button class="btn-modal-save" onclick="saveWebhook()">Salvar URL</button>
+      <button class="btn-modal-close" onclick="closeModal()">Fechar</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
